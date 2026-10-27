@@ -1,0 +1,20 @@
+.catalog {
+  padding: 20px 16px 16px;
+}
+
+.catalogTitle {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.catalogGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.catalogEmpty {
+  font-size: 15px;
+  color: var(--muted);
+}

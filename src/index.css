@@ -1,0 +1,18 @@
+:root {
+  --red: #ED2324;
+  --red-hover: #D21B1C;
+  --graphite: #38393D;
+  --light: #F1F2F3;
+  --text: #3C3C3C;
+  --white: #FFFFFF;
+  --border: #DCDEE1;
+  --muted: #6E7076;
+  --bs-body-font-family: "PT Sans", Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #202124;
+  font-family: "PT Sans", Arial, Helvetica, sans-serif;
+  color: var(--text);
+}

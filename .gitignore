@@ -1,6 +1,9 @@
 node_modules/
 build/
 dist/
+dist-ssr/
+*.local
+*.log
 
 .env
 .env.local
@@ -9,4 +12,4 @@ dist/
 .vscode/
 
 .DS_Store
-npm-debug.log*
+
