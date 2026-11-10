@@ -1,13 +1,15 @@
 import "./FeedPage.css";
-import { useState, type FC } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useEffect, useRef, useState, type FC } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { CONSTRUCTION_WORKS_MOCK } from "../modules/mock";
 import { ROUTES } from "../Routes";
-import type { AppOutletContext } from "../AppLayout";
+import { useAppDispatch, useAppSelector } from "../store";
+import {
+  getConstructionWorkFeed,
+  likeConstructionWork,
+} from "../slices/constructionWorksSlice";
+import { DEFAULT_IMAGE, DEFAULT_VIDEO, mediaUrl } from "../modules/media";
 
-const defaultImage = "/DefaultImage.png";
-const defaultVideo = "/DefaultVideo.mp4";
 const DESCRIPTION_LESS_LENGTH = 70;
 
 const splitDescription = (description: string) => {
@@ -21,37 +23,53 @@ const splitDescription = (description: string) => {
 
 export const FeedPage: FC = () => {
   const [expandedId, setExpandedId] = useState<number>();
+  const loadedId = useRef<number | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { cards } = useOutletContext<AppOutletContext>();
+  const dispatch = useAppDispatch();
+  const { feedWork: work, loading, error } = useAppSelector(
+    (state) => state.constructionWorks
+  );
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
-  const work =
-    cards.find((item) => String(item.id) === id) ??
-    CONSTRUCTION_WORKS_MOCK.find((item) => String(item.id) === id);
+  useEffect(() => {
+    const workId = id ? Number(id) : undefined;
+    if (workId !== undefined && loadedId.current === workId) {
+      loadedId.current = null;
+      return;
+    }
+    dispatch(getConstructionWorkFeed({ work_id: workId }));
+  }, [dispatch, id, isAuthenticated]);
 
-  if (!work) {
-    return <div className="feedEmpty">Работа не найдена</div>;
+  if (!work || (id !== undefined && work.id !== Number(id))) {
+    return <div className="feedEmpty">{loading ? "" : error ?? "Работа не найдена"}</div>;
   }
 
   const [descriptionLess, descriptionMore] = splitDescription(
     work.work_description ?? ""
   );
   const expanded = expandedId === work.id;
+  const liked = isAuthenticated && work.is_liked === 1;
 
-  const handleNext = () => {
-    const currentIndex = cards.findIndex((item) => item.id === work.id);
-    const nextItem = cards[currentIndex + 1] ?? cards[0];
-    if (nextItem) {
-      navigate(`${ROUTES.FEED}/${nextItem.id}`);
+  const handleNext = async () => {
+    const result = await dispatch(getConstructionWorkFeed({ work_id: work.id, next: true }));
+    if (getConstructionWorkFeed.fulfilled.match(result)) {
+      loadedId.current = result.payload.id;
+      navigate(`${ROUTES.FEED}/${result.payload.id}`);
     }
+  };
+
+  const handleLike = () => {
+    dispatch(likeConstructionWork({ workId: work.id, like: liked ? 0 : 1 }));
   };
 
   return (
     <div className="feed">
       <video
+        key={work.id}
         className="feedVideo"
-        src={work.video_url || defaultVideo}
-        poster={work.image_url || defaultImage}
+        src={mediaUrl(work.video_url, DEFAULT_VIDEO)}
+        poster={mediaUrl(work.image_url, DEFAULT_IMAGE)}
         autoPlay
         loop
         muted
@@ -62,10 +80,15 @@ export const FeedPage: FC = () => {
 
       <div className="feedOverlay">
         <div className="feedSide">
-          <div className="feedAction">
+          <button
+            type="button"
+            className={`feedAction feedLike ${liked ? "feedLikeActive" : ""}`}
+            disabled={!isAuthenticated || loading}
+            onClick={handleLike}
+          >
             <span className="feedActionCircle">&#9829;</span>
             <span className="feedActionLabel">{work.likes_count}</span>
-          </div>
+          </button>
 
           <div className="feedParam">
             <span className="feedParamLabel">Цена</span>
@@ -77,7 +100,7 @@ export const FeedPage: FC = () => {
             <span className="feedParamValue">{work.base_year}</span>
           </div>
 
-          <Button className="feedAction feedNext" onClick={handleNext}>
+          <Button className="feedAction feedNext" disabled={loading} onClick={handleNext}>
             <span className="feedActionCircle">&#9660;</span>
             <span className="feedActionLabel">Следующий</span>
           </Button>

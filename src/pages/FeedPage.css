@@ -144,3 +144,24 @@
   font-size: 15px;
   color: var(--muted);
 }
+
+.feedLike {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.feedLike:disabled {
+  cursor: default;
+}
+
+.feedLike:not(:disabled):hover .feedActionCircle {
+  border-color: var(--red);
+}
+
+.feedLikeActive .feedActionCircle {
+  background: var(--red);
+  border-color: var(--red);
+}

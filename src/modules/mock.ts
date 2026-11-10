@@ -1,6 +1,6 @@
-import type { ConstructionWork } from "./constructionWorksApi";
+import type { ConstructionWorkOut } from "../api/Api";
 
-export const CONSTRUCTION_WORKS_MOCK: ConstructionWork[] = [
+export const CONSTRUCTION_WORKS_MOCK: ConstructionWorkOut[] = [
   {
     id: 1,
     work_name: "Каменная кладка",

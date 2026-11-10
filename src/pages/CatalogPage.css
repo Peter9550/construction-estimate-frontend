@@ -18,3 +18,9 @@
   font-size: 15px;
   color: var(--muted);
 }
+
+.catalogUser {
+  margin: -6px 0 12px;
+  font-size: 14px;
+  color: var(--muted);
+}

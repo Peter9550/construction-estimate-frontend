@@ -1,0 +1,126 @@
+.add {
+  padding: 20px 16px 0;
+}
+
+.addHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.addBadge {
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: var(--red);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.addHint {
+  margin: 14px 0 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.addLabel {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.addMediaBox {
+  width: 100%;
+  height: 150px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--graphite);
+}
+
+.addMediaImage,
+.addMediaVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.addMediaImage {
+  background: var(--light);
+}
+
+.addFile.form-control {
+  margin-top: 8px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.addValue {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.addField.form-control {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.addArea.form-control {
+  height: 72px;
+  padding: 10px 14px;
+  font-size: 13px;
+  resize: none;
+}
+
+.addRow {
+  display: flex;
+  gap: 10px;
+}
+
+.addColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.addError {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--red);
+}
+
+.addSubmit.btn {
+  width: 100%;
+  height: 44px;
+  margin: 20px 0;
+  border: 0;
+  border-radius: 16px;
+  background: var(--red);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.addSubmit.btn:hover,
+.addSubmit.btn:active {
+  background: var(--red-hover);
+}

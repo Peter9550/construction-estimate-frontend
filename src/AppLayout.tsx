@@ -1,24 +1,20 @@
-import { useState, type FC } from "react";
+import type { FC } from "react";
 import { Outlet } from "react-router-dom";
-import type { ConstructionWork } from "./modules/constructionWorksApi";
-import { CONSTRUCTION_WORKS_MOCK } from "./modules/mock";
 import { TabBar } from "./components/TabBar";
+import { LoadingOverlay } from "./components/LoadingOverlay";
+import { useAppSelector } from "./store";
 import "./MobileApp.css";
 
-export interface AppOutletContext {
-  cards: ConstructionWork[];
-  setCards: (cards: ConstructionWork[]) => void;
-}
-
 export const AppLayout: FC = () => {
-  const [cards, setCards] = useState<ConstructionWork[]>(CONSTRUCTION_WORKS_MOCK);
+  const loading = useAppSelector((state) => state.constructionWorks.loading);
 
   return (
     <div className="appShell">
       <main className="appContent">
-        <Outlet context={{ cards, setCards }} />
+        <Outlet />
       </main>
-      <TabBar cards={cards} />
+      <TabBar />
+      {loading && <LoadingOverlay />}
     </div>
   );
 };

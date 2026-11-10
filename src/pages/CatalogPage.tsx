@@ -1,33 +1,27 @@
 import "./CatalogPage.css";
-import { useEffect, useState, type FC } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { CONSTRUCTION_WORKS_MOCK } from "../modules/mock";
+import { useEffect, type FC } from "react";
+import { useNavigate } from "react-router-dom";
 import { PriceFilter } from "../components/PriceFilter";
 import { WorkCard } from "../components/WorkCard";
 import { ROUTES } from "../Routes";
-import type { AppOutletContext } from "../AppLayout";
-
-const prices = CONSTRUCTION_WORKS_MOCK.map((work) => work.historical_price ?? 0);
-const priceMin = Math.min(...prices);
-const priceMax = Math.max(...prices);
+import { useAppDispatch, useAppSelector } from "../store";
+import {
+  deleteConstructionWork,
+  getConstructionWorksList,
+  setPriceLimit,
+} from "../slices/constructionWorksSlice";
 
 const CatalogPage: FC = () => {
-  const [priceLimit, setPriceLimit] = useState(priceMax);
-  const [works, setWorks] = useState(CONSTRUCTION_WORKS_MOCK);
-  const { setCards } = useOutletContext<AppOutletContext>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { works, priceLimit, priceMin, priceMax, loading } = useAppSelector(
+    (state) => state.constructionWorks
+  );
+  const { isAuthenticated, user_login } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    setCards(CONSTRUCTION_WORKS_MOCK);
-  }, [setCards]);
-
-  const handleSearch = () => {
-    const results = CONSTRUCTION_WORKS_MOCK.filter(
-      (work) => (work.historical_price ?? 0) <= priceLimit
-    );
-    setWorks(results);
-    setCards(results);
-  };
+    dispatch(getConstructionWorksList());
+  }, [dispatch, isAuthenticated]);
 
   const handleCardClick = (id: number) => {
     navigate(`${ROUTES.FEED}/${id}`);
@@ -36,13 +30,15 @@ const CatalogPage: FC = () => {
   return (
     <div className="catalog">
       <h1 className="catalogTitle">Справочник работ</h1>
+      {isAuthenticated && <p className="catalogUser">Сметчик {user_login}</p>}
 
       <PriceFilter
-        value={priceLimit}
+        value={priceLimit ?? priceMax}
         min={priceMin}
         max={priceMax}
-        setValue={(value) => setPriceLimit(value)}
-        onSubmit={handleSearch}
+        disabled={loading}
+        setValue={(value) => dispatch(setPriceLimit(value))}
+        onSubmit={() => dispatch(getConstructionWorksList())}
       />
 
       {!works.length ? (
@@ -52,8 +48,14 @@ const CatalogPage: FC = () => {
           {works.map((work) => (
             <WorkCard
               key={work.id}
-              onClick={() => handleCardClick(work.id)}
               {...work}
+              onClick={() => handleCardClick(work.id)}
+              onDelete={
+                isAuthenticated && work.is_mine
+                  ? () => dispatch(deleteConstructionWork(work.id))
+                  : undefined
+              }
+              disabled={loading}
             />
           ))}
         </div>

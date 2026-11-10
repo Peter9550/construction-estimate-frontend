@@ -6,11 +6,12 @@ interface Props {
   value: number;
   min: number;
   max: number;
+  disabled?: boolean;
   setValue: (value: number) => void;
   onSubmit: () => void;
 }
 
-export const PriceFilter: FC<Props> = ({ value, min, max, setValue, onSubmit }) => (
+export const PriceFilter: FC<Props> = ({ value, min, max, disabled, setValue, onSubmit }) => (
   <div className="priceFilter">
     <div className="priceFilterHead">
       <span>Цена до</span>
@@ -28,7 +29,7 @@ export const PriceFilter: FC<Props> = ({ value, min, max, setValue, onSubmit }) 
       <span>{min}</span>
       <span>{max}</span>
     </div>
-    <Button className="priceFilterButton" onClick={onSubmit}>
+    <Button className="priceFilterButton" disabled={disabled} onClick={onSubmit}>
       Найти
     </Button>
   </div>

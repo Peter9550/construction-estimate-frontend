@@ -11,3 +11,4 @@ export const ROUTE_LABELS: { [key in RouteKeyType]: string } = {
   CATALOG: "Плитка",
   LOGIN: "Вход",
 };
+export const LOGOUT_LABEL = "Выход";
