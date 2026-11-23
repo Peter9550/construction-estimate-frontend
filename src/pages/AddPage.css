@@ -124,3 +124,13 @@
 .addSubmit.btn:active {
   background: var(--red-hover);
 }
+
+.addColumn {
+  min-width: 0;
+}
+
+@media (max-width: 359px) {
+  .addRow {
+    flex-direction: column;
+  }
+}

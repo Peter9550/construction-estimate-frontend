@@ -67,6 +67,7 @@ export const TabBar: FC = () => {
         <button
           type="button"
           className={`tabBarItem ${isLogin ? "tabBarItemActive" : ""}`}
+          disabled={import.meta.env.MODE === "pages"}
           onClick={() => navigate(ROUTES.LOGIN)}
         >
           {ROUTE_LABELS.LOGIN}

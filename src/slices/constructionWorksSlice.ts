@@ -77,11 +77,12 @@ const findMockFeedWork = ({ work_id, next }: FeedQuery) => {
   return CONSTRUCTION_WORKS_MOCK.find((work) => work.id === work_id);
 };
 
-export const getConstructionWorksList = createAsyncThunk<ConstructionWorkOut[], void, ThunkConfig>(
+  export const getConstructionWorksList = createAsyncThunk<ConstructionWorkOut[], void, ThunkConfig>(
   "constructionWorks/getConstructionWorksList",
   async (_, { getState, rejectWithValue }) => {
     const { constructionWorks, user } = getState();
     const { priceLimit } = constructionWorks;
+    if (import.meta.env.MODE === "pages") return filterMockByPrice(priceLimit);
     try {
       const response = await api.constructionWorks.getConstructionWorks(
         priceLimit === null ? {} : { max_historical_price: priceLimit }
@@ -99,6 +100,9 @@ export const getConstructionWorksList = createAsyncThunk<ConstructionWorkOut[], 
 export const getConstructionWorkFeed = createAsyncThunk<ConstructionWorkOut, FeedQuery, ThunkConfig>(
   "constructionWorks/getConstructionWorkFeed",
   async (query, { getState, rejectWithValue }) => {
+    if (import.meta.env.MODE === "pages") {
+      return findMockFeedWork(query) ?? rejectWithValue("Работа не найдена");
+    }
     try {
       const response = await api.constructionWorks.getConstructionWorkFeed(query);
       return response.data;

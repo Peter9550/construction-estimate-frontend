@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --mode pages && cp dist/index.html dist/404.html",
     "lint": "oxlint",
-    "preview": "vite preview",
-    "generate-api": "node scripts/generate-api.mjs"
+    "preview": "vite preview --mode pages",
+    "generate-api": "node scripts/generate-api.mjs",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.14.0",
@@ -25,9 +26,12 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "gh-pages": "^6.3.0",
+    "mkcert": "^3.2.0",
     "oxlint": "^1.89.0",
     "swagger-typescript-api": "^13.14.0",
     "typescript": "~7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "vite-plugin-pwa": "^2.0.0"
   }
 }

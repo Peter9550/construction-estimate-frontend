@@ -165,3 +165,23 @@
   background: var(--red);
   border-color: var(--red);
 }
+
+@supports (height: 100dvh) {
+  .feed {
+    height: calc(100dvh - 64px);
+  }
+}
+
+@media (max-height: 600px) {
+  .feedOverlay {
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .feedSide {
+    flex-direction: row;
+    width: 100%;
+    margin-top: auto;
+    gap: 6px;
+  }
+}
